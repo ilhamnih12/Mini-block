@@ -792,12 +792,13 @@ socket.onmessage = async (event) => {
         moveRight.addEventListener("touchstart", () => keys["d"] = true);
         moveRight.addEventListener("touchend", () => keys["d"] = false);
 
-        // Pastikan canvas responsif
-        window.addEventListener("resize", () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+            // Pastikan canvas responsif
+            window.addEventListener("resize", () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        } // Add this closing brace to fix the error
     </script>
 </body>
 </html>
