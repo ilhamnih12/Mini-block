@@ -66,6 +66,11 @@
             <button id="moveDown">▼</button>
             <button id="moveRight">▶</button>
         </div>
+        <!-- Tambahkan tombol untuk berjalan -->
+        <div class="horizontal">
+            <button id="walkForward">⬆</button>
+            <button id="walkBackward">⬇</button>
+        </div>
     </div>
 
     <script>
@@ -791,6 +796,16 @@ socket.onmessage = async (event) => {
 
         moveRight.addEventListener("touchstart", () => keys["d"] = true);
         moveRight.addEventListener("touchend", () => keys["d"] = false);
+
+        // Tambahkan event listener untuk tombol berjalan
+        const walkForward = document.getElementById("walkForward");
+        const walkBackward = document.getElementById("walkBackward");
+
+        walkForward.addEventListener("touchstart", () => keys["w"] = true);
+        walkForward.addEventListener("touchend", () => keys["w"] = false);
+
+        walkBackward.addEventListener("touchstart", () => keys["s"] = true);
+        walkBackward.addEventListener("touchend", () => keys["s"] = false);
 
             // Pastikan canvas responsif
             window.addEventListener("resize", () => {
