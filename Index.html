@@ -60,16 +60,11 @@
     ">Ubah</button>
 
     <div id="touchControls">
-        <button id="moveUp">▲</button>
         <div class="horizontal">
             <button id="moveLeft">◀</button>
-            <button id="moveDown">▼</button>
             <button id="moveRight">▶</button>
-        </div>
-        <!-- Tambahkan tombol untuk berjalan -->
-        <div class="horizontal">
-            <button id="walkForward">⬆</button>
-            <button id="walkBackward">⬇</button>
+            <button id="moveForward">▲</button>
+            <button id="moveBackward">▼</button>
         </div>
     </div>
 
@@ -623,6 +618,39 @@ document.addEventListener("mousemove", (event) => {
         rotationAngle.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotationAngle.x));
     }
 });
+
+let isTouching = false;
+let lastTouchX = 0;
+let lastTouchY = 0;
+
+// Event listeners for touch controls
+document.addEventListener("touchstart", (event) => {
+    isTouching = true;
+    const touch = event.touches[0];
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+});
+
+document.addEventListener("touchmove", (event) => {
+    if (isTouching) {
+        const touch = event.touches[0];
+        const deltaX = touch.clientX - lastTouchX;
+        const deltaY = touch.clientY - lastTouchY;
+
+        rotationAngle.y -= deltaX * 0.002; // Adjust yaw (left-right)
+        rotationAngle.x -= deltaY * 0.002; // Adjust pitch (up-down)
+
+        // Limit pitch to prevent flipping
+        rotationAngle.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotationAngle.x));
+
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
+    }
+});
+
+document.addEventListener("touchend", () => {
+    isTouching = false;
+});
           
 document.getElementById("ubahKamera").addEventListener("click", () => {
         cameraMode = (cameraMode + 1) % 3;
@@ -780,16 +808,10 @@ socket.onmessage = async (event) => {
             };
 
         // Tambahkan event listener untuk tombol kontrol
-        const moveUp = document.getElementById("moveUp");
-        const moveDown = document.getElementById("moveDown");
         const moveLeft = document.getElementById("moveLeft");
         const moveRight = document.getElementById("moveRight");
-
-        moveUp.addEventListener("touchstart", () => keys["w"] = true);
-        moveUp.addEventListener("touchend", () => keys["w"] = false);
-
-        moveDown.addEventListener("touchstart", () => keys["s"] = true);
-        moveDown.addEventListener("touchend", () => keys["s"] = false);
+        const moveForward = document.getElementById("moveForward");
+        const moveBackward = document.getElementById("moveBackward");
 
         moveLeft.addEventListener("touchstart", () => keys["a"] = true);
         moveLeft.addEventListener("touchend", () => keys["a"] = false);
@@ -797,15 +819,11 @@ socket.onmessage = async (event) => {
         moveRight.addEventListener("touchstart", () => keys["d"] = true);
         moveRight.addEventListener("touchend", () => keys["d"] = false);
 
-        // Tambahkan event listener untuk tombol berjalan
-        const walkForward = document.getElementById("walkForward");
-        const walkBackward = document.getElementById("walkBackward");
+        moveForward.addEventListener("touchstart", () => keys["w"] = true);
+        moveForward.addEventListener("touchend", () => keys["w"] = false);
 
-        walkForward.addEventListener("touchstart", () => keys["w"] = true);
-        walkForward.addEventListener("touchend", () => keys["w"] = false);
-
-        walkBackward.addEventListener("touchstart", () => keys["s"] = true);
-        walkBackward.addEventListener("touchend", () => keys["s"] = false);
+        moveBackward.addEventListener("touchstart", () => keys["s"] = true);
+        moveBackward.addEventListener("touchend", () => keys["s"] = false);
 
             // Pastikan canvas responsif
             window.addEventListener("resize", () => {
